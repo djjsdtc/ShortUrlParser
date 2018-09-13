@@ -4,6 +4,9 @@ using System.Net;
 
 namespace ShortUrlParse
 {
+    /// <summary>
+    /// 将短网址解析到其原始地址的小工具，附带识别一个短网址是不是 gbf 的功能。
+    /// </summary>
     public class ShortUrlParser
     {
         protected class WebClientForShortUrl : WebClient
@@ -41,6 +44,12 @@ namespace ShortUrlParse
             }
         }
 
+        /// <summary>
+        /// 解析短网址到其原始 URL，并指定解析深度。
+        /// </summary>
+        /// <param name="shortUrl">待解析的短网址。</param>
+        /// <param name="maxParseTime">解析深度（循环次数）。如果给定小于等于 0 的值则表示仅对给定的 URL 进行解码处理。</param>
+        /// <returns>解析出的原始 URL。如在给定深度内没有解析完成，则返回最后一次解析出的短网址。如解析失败则返回空字符串。</returns>
         public string ParseShortUrl(string shortUrl, int? maxParseTime = null)
         {
             shortUrl = WebUtility.UrlDecode(shortUrl);
@@ -72,6 +81,11 @@ namespace ShortUrlParse
             }
         }
 
+        /// <summary>
+        /// 进行单次短网址解析。
+        /// </summary>
+        /// <param name="shortUrl">待解析的短网址。</param>
+        /// <returns>单次解析结果。如有异常则抛出。</returns>
         protected string InnerParseShortUrl(string shortUrl)
         {
             shortUrl = WebUtility.UrlDecode(shortUrl);
@@ -103,6 +117,12 @@ namespace ShortUrlParse
             }
         }
 
+        /// <summary>
+        /// 判断一个短网址是否为 GBF 的网址。
+        /// </summary>
+        /// <param name="shortUrl">待解析的短网址。</param>
+        /// <param name="maxParseTime">解析深度（循环次数）。如果给定小于等于 0 的值则表示仅对给定的 URL 进行解码处理。</param>
+        /// <returns>如原始地址为 GBF 地址则返回 true。如原始地址非 GBF 地址、解析失败或在给定的深度内无法解析出原始地址，则返回 false。</returns>
         public bool IsGranBlueFantasy(string shortUrl, int? maxParseTime = null) => ParseShortUrl(shortUrl, maxParseTime).Contains("granbluefantasy.jp");
     }
 }
